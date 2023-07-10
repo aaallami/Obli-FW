@@ -66,7 +66,7 @@ At the end of the protocol, the clear BF is stored in BF.text file under the MPS
 
 To run on different machines, follow the instructions:
 
-1- Set the ip addresses in a MPSPDZ/HOST.txt file 
+1- Set the IP addresses in a MPSPDZ/HOST.txt file 
 
 2- For the Shamir scheme run for machines 0, 1, and 3 consecutively:
 
