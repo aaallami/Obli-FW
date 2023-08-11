@@ -1,0 +1,61 @@
+#hash function
+def hash_fun(x, a, b, p):
+    hash_x= a*x
+    hash_x=(hash_x+b)
+    return hash_x
+"""
+    Input:
+    n = number of ip elements
+    k = number of hash functions
+    B = bloofilter size
+    p = prime
+    a, b= ramdom values for has function
+"""
+def alg2(iplist, a, b, sBF, B, k):
+    sigmai=sint.Array(n)
+    @for_range_opt_multithread(n_threads, n)
+    def _(i):
+        sigmai[i]=sint(0)
+    #step2    
+    for i in range(n):
+        for j in range(k):
+            idx=hash_fun(iplist[i], a[j], b[j], p)%B
+            sigmai[i]=sigmai[i]+sBF[idx]
+    #step 3
+        sigma=sigmai[i].reveal()
+        if_then(sigma==k)
+        print_ln('blook ip')
+        end_if()
+
+def bf_initi(sBF, cBF, iplist,a, b, B, n, k, p):
+    for i in range(n):
+        #for all the k hashes (0...k-1)
+        for j in range(k):
+            idx=hash_fun(iplist[i], a[j], b[j], p)%B
+            sBF[idx]=sint(1)
+            cBF[idx]=1
+
+
+"""
+    Main function
+"""
+p=program.prime 
+B=1400000
+n_threads=4
+n=10
+k=10
+a=[21990232883]*k
+b=[21990232]*k
+sBF=sint.Array(B)
+cBF=[0]*B
+
+iplist=list(range(0, n+1))
+
+#   Initialization
+bf_initi(sBF, cBF, iplist, a, b, B, n, k, p)
+
+#Step1
+#Derive γ from the incoming message
+gamma=iplist
+#   Evaluation
+alg2(gamma,a, b, sBF, B, k)

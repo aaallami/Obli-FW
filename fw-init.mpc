@@ -1,0 +1,44 @@
+# bloom filter initialization
+def hash_fun(x, a, b, p):
+    hash_x= a*x
+    hash_x=(hash_x+b)
+    return hash_x%p
+"""
+    Input:
+    n = number of ip elements
+    k = number of hash functions
+    B = bloofilter size
+    p = module of a prime or 2^{kabba}
+    a, b= ramdom values for has function
+"""
+def bf_initi(sBF, cBF, iplist,a, b, B, n, k, p):
+    for i in range(n):
+        #for all the k hashes (0...k-1)
+        for j in range(k):
+            idx=hash_fun(iplist[i], a[j], b[j], p)%B
+            sBF[idx]=sint(1)
+            cBF[idx]=1
+
+"""
+    Main function
+"""
+p=program.prime
+print_ln('p=%s',p)
+B=1400000
+n_threads=4
+n=10
+k=10
+a=[21990232883]*k
+b=[21990232]*k
+sBF=sint.Array(B)
+cBF=[0]*B
+#preparing synthetic simulated ip list
+iplist=list(range(0, n+1))
+
+# call initialization fucntion based on protocol1
+bf_initi(sBF, cBF, iplist, a, b, B, n, k, p)
+
+# Write the clear BF to BF.txt file.
+with open("BF.txt", "w") as file:
+    for i in cBF:
+        file.write(str(i)+'\n')

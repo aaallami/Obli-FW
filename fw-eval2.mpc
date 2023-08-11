@@ -1,0 +1,46 @@
+def alg3(sRule, gamma, n, m):
+    sigma=sint.Array(n)
+    csigma=[1]*n
+    test=False
+    #@for_range_opt_multithread(n_threads, n)
+    #def _(i):
+    #    pi[i]=sint(1)
+    #step2
+    for i in range(m):
+        for j in range(n):
+            sigma[j]=sRule[j]-gamma[i]
+            if_then(sigma[j].reveal()==0)
+            csigma[j]=0
+            end_if()
+        #step3
+        for j in range(n):
+            if csigma[j]==0:
+                print_ln('ip blocked')
+                break
+                
+
+def sRule_initi(sRule, iptable,n):
+    for i in range(n):
+        sRule[i]=sint(iptable[i])
+
+
+"""
+    Main function
+"""
+p=program.prime 
+n=100   # number of rules in the iptable
+m=10    # number of comming packet
+
+sRule=sint.Array(n)
+
+iptable=list(range(0, n+1))
+
+#Initialization
+sRule_initi(sRule, iptable, n)
+
+#Step1
+#Derive γ from the incoming message
+gamma=list(range(0, m+1))
+#   Evaluation
+alg3(sRule, gamma, n, m)
+
