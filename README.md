@@ -2,7 +2,7 @@
 
 This code is designed based on Oblivious IPtable paper for Secure Firewall implemntation.
 
-The code implements three protocols and only meant for simulation to benchmark the accurate time and communication cost.
+The code implements three protocols and only meant for simulation to benchmark the overhead time and communication cost.
 # System overivew
 
 <img src="images/obliviousfirewalls.png" alt="Example Image" width="400" />
