@@ -1,4 +1,4 @@
-# SFW
+# Obliv-FW
 
 This code is designed based on Oblivious IPtable paper for Secure Firewall implemntation.
 
