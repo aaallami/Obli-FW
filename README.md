@@ -1,6 +1,6 @@
 # Obliv-FW
 
-This code is designed based on Oblivious IPtable paper for Secure Firewall implemntation.
+This code is designed based on the paper (https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4868510) for Secure Firewall implemntation.
 
 The code implements three protocols and only meant for simulation to benchmark the overhead time and communication cost.
 # System overivew
