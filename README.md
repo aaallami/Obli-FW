@@ -57,7 +57,7 @@ a and b=two random values in the field/ring which are fixed through all the prot
 
 1- To compile the code run:
 
-    ./compile.py -F 40 -P 2199023288321 fw-init
+    ./compile.py -F 20 fw-init
 2- To run the code for Shamir's secret sharing scheme locally use:
 
     Scripts/shamir.sh fw-init
@@ -78,7 +78,7 @@ To run on different machines, follow the instructions:
 
 1- To compile the code run: 
     
-    ./compile.py -F 40 -P 2199023288321 fw-eval1
+    ./compile.py -F 20 fw-eval1
 2- To run the code for Shamir's secret sharing scheme locally use the following:
 
     Scripts/shamir.sh fw-eval1
