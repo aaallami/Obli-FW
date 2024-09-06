@@ -57,7 +57,7 @@ a and b=two random values in the field/ring which are fixed through all the prot
 
 1- To compile the code run:
 
-    ./compile.py -F 20 fw-init
+    ./compile.py -F 20 -p 2199023288321 fw-init
 2- To run the code for Shamir's secret sharing scheme locally use:
 
     Scripts/shamir.sh fw-init
@@ -78,7 +78,7 @@ To run on different machines, follow the instructions:
 
 1- To compile the code run: 
     
-    ./compile.py -F 20 fw-eval1
+    ./compile.py -F 20 -p 2199023288321 fw-eval1
 2- To run the code for Shamir's secret sharing scheme locally use the following:
 
     Scripts/shamir.sh fw-eval1
@@ -107,7 +107,7 @@ To see how the evaluation acts on a different iplist you can change the iplist p
 
 1- To compile the code run: 
     
-    ./compile.py fw-eval2
+    ./compile.py -F 40 -p 2199023288321fw-eval2
 2- To run the code for Shamir's secret sharing scheme locally using:
 
     Scripts/shamir.sh fw-eval2
