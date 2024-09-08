@@ -20,8 +20,8 @@ def alg3(sRule, gamma, n, m):
     for i in range(m):
         for j in range(n):
             sigma[j] = sRule[j] - gamma[i]  # Calculate the difference
-            if_then(sigma[j].reveal() == 0):  # Check if the difference is zero (match)
-                csigma[j] = 0  # Indicate that the packet is blocked
+            if_then(sigma[j].reveal() == 0)  # Check if the difference is zero (match)
+            csigma[j] = 0  # Indicate that the packet is blocked
             end_if()
 
     # Step 3: Check if any packet is blocked and print a message
