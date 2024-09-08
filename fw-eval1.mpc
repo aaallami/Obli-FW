@@ -1,5 +1,5 @@
 def hash_fun(x, a, b, p):
-"""
+    """
     Calculates the hash value of an input 'x' using a linear hash function.
 
     Args:
@@ -43,8 +43,8 @@ def alg2(packet, a, b, sBF, B, k):
     # Step 3: Reveal the sum of shares and check if it matches 'k'
     for i in range(n):
         sigma = sigmai[i].reveal()  # Reveal the sum of shares
-        if_then(sigma == k):  # Check if the sum matches 'k'
-            print_ln('blook packet')  # Print a message if the packet is blocked
+        if_then(sigma == k)  # Check if the sum matches 'k'
+        print_ln('blook packet')  # Print a message if the packet is blocked
         end_if()
 
 def bf_initi(sBF, rules, a, b, B, n, k, p):
@@ -65,7 +65,7 @@ def bf_initi(sBF, rules, a, b, B, n, k, p):
     for i in range(n):
         # For all hash functions (0 to k-1)
         for j in range(k):
-            idx = hash_fun(packets[i], a[j], b[j], p) % B  # Calculate the index for the Bloom filter
+            idx = hash_fun(rules[i], a[j], b[j], p) % B  # Calculate the index for the Bloom filter
             sBF[idx] = sint(1)  # Set the corresponding secret share to 1
             
 """
@@ -88,16 +88,16 @@ sBF = sint.Array(B)  # Array for secret shares of the Bloom filter
 
 # Create a list of synthetic rules 
 Rules = list(range(0, n + 1))
-# Create a list of synthetic packets
-packets=list(range(0, n+1))
 
 # --- Initialization ---
 
-bf_initi(sBF, cBF, packets, a, b, B, n, k, p)  # Initialize Bloom filter
+bf_initi(sBF, Rules, a, b, B, n, k, p)  # Initialize Bloom filter
 
 # --- Evaluation ---
+# Create a list of synthetic packets
+packets=list(range(0, n+1))
 
-# Step 1: Derive gamma (packet) from incoming message
+# Step 1: Derive gamma (packets) from incoming message
 gamma = packets
 
 alg2(gamma, a, b, sBF, B, k)  # Run evaluation protocol (using Bloom filter)
