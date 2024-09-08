@@ -1,5 +1,5 @@
 def hash_fun(x, a, b, p):
-"""
+    """
     Calculates the hash value of an input 'x' using a linear hash function.
 
     Args:
@@ -31,7 +31,7 @@ def bf_initi(sBF, rules, a, b, B, n, k, p):
     for i in range(n):
         # For all hash functions (0 to k-1)
         for j in range(k):
-            idx = hash_fun(packets[i], a[j], b[j], p) % B  # Calculate the index for the Bloom filter
+            idx = hash_fun(rules[i], a[j], b[j], p) % B  # Calculate the index for the Bloom filter
             sBF[idx] = sint(1)  # Set the corresponding secret share to 1
 """
 Main function for benchmarking Obliv-FW protocols.
@@ -56,4 +56,4 @@ Rules = list(range(0, n + 1))
 
 # --- Initialization ---
 
-bf_initi(sBF, packets, a, b, B, n, k, p)  # Initialize Bloom filter
+bf_initi(sBF, Rules, a, b, B, n, k, p)  # Initialize Bloom filter
