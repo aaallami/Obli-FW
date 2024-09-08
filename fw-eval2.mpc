@@ -1,46 +1,74 @@
 def alg3(sRule, gamma, n, m):
-    sigma=sint.Array(n)
-    csigma=[1]*n
-    test=False
-    #@for_range_opt_multithread(n_threads, n)
-    #def _(i):
-    #    pi[i]=sint(1)
-    #step2
+    """
+    Evaluates a list of packets against a shared rule list using a distributed protocol (without Bloom filter).
+
+    Args:
+        sRule (list): Secret shares of the rule list.
+        gamma (list): A list of packets to be evaluated.
+        n (int): Size of the rule list.
+        m (int): Size of the packet list.
+
+    Returns:
+        None: Prints "ip blocked" for each packet that matches the rule list.
+    """
+
+    sigma = sint.Array(n)  # Array to store the difference between rule shares and packet header shares
+    csigma = [1] * n  # Array to indicate if a packet is blocked (initialized to 1, meaning not blocked)
+    test = False  # Flag to indicate if a packet is blocked (not used in this version)
+
+    # Step 2: Calculate the difference between rule shares and packet values for each packet
     for i in range(m):
         for j in range(n):
-            sigma[j]=sRule[j]-gamma[i]
-            if_then(sigma[j].reveal()==0)
-            csigma[j]=0
+            sigma[j] = sRule[j] - gamma[i]  # Calculate the difference
+            if_then(sigma[j].reveal() == 0):  # Check if the difference is zero (match)
+                csigma[j] = 0  # Indicate that the packet is blocked
             end_if()
-        #step3
+
+    # Step 3: Check if any packet is blocked and print a message
         for j in range(n):
-            if csigma[j]==0:
-                print_ln('ip blocked')
-                break
+            if csigma[j] == 0:
+                print_ln('packet blocked')  
+                break  # Exit the loop if a packet is blocked
                 
 
-def sRule_initi(sRule, iptable,n):
+def sRule_initi(sRule, rules, n):
+    """
+    Initializes a list of secret shares with a list of IP addresses.
+
+    Args:
+        sRule (list): The list to store the secret shares of IP addresses.
+        rules (list): The list of rules.
+        n (int): Size of the rules list.
+    """
+
     for i in range(n):
-        sRule[i]=sint(iptable[i])
+        sRule[i] = sint(rules[i])  # Assign each rule as a secret share
 
 
 """
-    Main function
+Main function for benchmarking Obliv-FW protocol without using Bloom filter.
 """
-p=program.prime 
-n=100   # number of rules in the iptable
-m=10    # number of comming packet
 
-sRule=sint.Array(n)
+# Set parameters
+p = program.prime  # Prime number for modulo operation
+n = 100  # Number of rules in the iptable
+m = 10  # Number of incoming packets
 
-iptable=list(range(0, n+1))
+# Initialize secret shares of the rule list
+sRule = sint.Array(n)
 
-#Initialization
-sRule_initi(sRule, iptable, n)
+# Create a list of rules
+rules = list(range(0, n + 1))
+# Initialize secret shares of the rule list
+sRule = sint.Array(n)
 
-#Step1
-#Derive γ from the incoming message
-gamma=list(range(0, m+1))
-#   Evaluation
+# --- Initialization ---
+sRule_initi(sRule, rules, n)  # Initialize the secret shares of the rule list
+
+# --- Evaluation ---
+
+# Step 1: Derive gamma (packet) from incoming message
+gamma = list(range(0, m + 1))
+
+# Run evaluation protocol (without using Bloom filter)
 alg3(sRule, gamma, n, m)
-
