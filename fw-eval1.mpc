@@ -86,8 +86,9 @@ b = [21990232] * k
 # Initialize Bloom filter
 sBF = sint.Array(B)  # Array for secret shares of the Bloom filter
 
-# Create a list of packets 
-packets = list(range(0, n + 1))
+# Create a list of synthetic rules 
+Rules = list(range(0, n + 1))
+# Create a list of synthetic packets
 iplist=list(range(0, n+1))
 
 # --- Initialization ---
