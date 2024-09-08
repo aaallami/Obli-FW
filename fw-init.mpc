@@ -1,44 +1,59 @@
-# bloom filter initialization
 def hash_fun(x, a, b, p):
-    hash_x= a*x
-    hash_x=(hash_x+b)
-    return hash_x%p
 """
-    Input:
-    n = number of ip elements
-    k = number of hash functions
-    B = bloofilter size
-    p = module of a prime or 2^{kabba}
-    a, b= ramdom values for has function
-"""
-def bf_initi(sBF, cBF, iplist,a, b, B, n, k, p):
+    Calculates the hash value of an input 'x' using a linear hash function.
+
+    Args:
+        x (sint): The input value to be hashed.
+        a (sint): A random coefficient for the hash function.
+        b (sint): Another random coefficient for the hash function.
+        p (int): A prime number for modulo operation.
+
+    Returns:
+        int: The calculated hash value of 'x'.
+    """
+    hash_x = (a * x + b) # Calculate hash value modulo 'p'
+    return hash_x
+def bf_initi(sBF, rules, a, b, B, n, k, p):
+    """
+    Initializes a Bloom filter with a list of rules, using secret shares.
+
+    Args:
+        sBF (list): The secret shares of the Bloom filter.
+        rules (list): The list of rules to be added to the Bloom filter.
+        a (list): A list of random coefficients 'a' for the hash function.
+        b (list): A list of random coefficients 'b' for the hash function.
+        B (int): Size of the Bloom filter.
+        n (int): Size of the rule list.
+        k (int): Number of hash functions.
+        p (int): A prime number for modulo operation.
+    """
+
     for i in range(n):
-        #for all the k hashes (0...k-1)
+        # For all hash functions (0 to k-1)
         for j in range(k):
-            idx=hash_fun(iplist[i], a[j], b[j], p)%B
-            sBF[idx]=sint(1)
-            cBF[idx]=1
-
+            idx = hash_fun(packets[i], a[j], b[j], p) % B  # Calculate the index for the Bloom filter
+            sBF[idx] = sint(1)  # Set the corresponding secret share to 1
 """
-    Main function
+Main function for benchmarking Obliv-FW protocols.
 """
-p=program.prime
-print_ln('p=%s',p)
-B=1400000
-n_threads=4
-n=10
-k=10
-a=[21990232883]*k
-b=[21990232]*k
-sBF=sint.Array(B)
-cBF=[0]*B
-#preparing synthetic simulated ip list
-iplist=list(range(0, n+1))
 
-# call initialization fucntion based on protocol1
-bf_initi(sBF, cBF, iplist, a, b, B, n, k, p)
+# Set parameters
+p = program.prime  # Prime number for modulo operation
+B = 200000  # Bloom filter size (set to 200000 for testing)
+n_threads = 8  # Number of threads for multithreading
+n = 10  # Number of packets
+k = 10  # Number of hash functions
 
-# Write the clear BF to BF.txt file.
-with open("BF.txt", "w") as file:
-    for i in cBF:
-        file.write(str(i)+'\n')
+# Initialize random coefficients for hash function
+a = [21990232883] * k  
+b = [21990232] * k
+
+# Initialize Bloom filter
+sBF = sint.Array(B)  # Array for secret shares of the Bloom filter
+
+# Create a list of synthetic rules 
+Rules = list(range(0, n + 1))
+
+# --- Initialization ---
+
+bf_initi(sBF, packets, a, b, B, n, k, p)  # Initialize Bloom filter
