@@ -1,61 +1,102 @@
-#hash function
 def hash_fun(x, a, b, p):
-    hash_x= a*x
-    hash_x=(hash_x+b)
+"""
+    Calculates the hash value of an input 'x' using a linear hash function.
+
+    Args:
+        x (sint): The input value to be hashed.
+        a (sint): A random coefficient for the hash function.
+        b (sint): Another random coefficient for the hash function.
+        p (int): A prime number for modulo operation.
+
+    Returns:
+        int: The calculated hash value of 'x'.
+    """
+    hash_x = (a * x + b) # Calculate hash value modulo 'p'
     return hash_x
-"""
-    Input:
-    n = number of ip elements
-    k = number of hash functions
-    B = bloofilter size
-    p = prime
-    a, b= ramdom values for has function
-"""
-def alg2(iplist, a, b, sBF, B, k):
-    sigmai=sint.Array(n)
+
+def alg2(packet, a, b, sBF, B, k):
+    """
+    Evaluates an extracted packet hider against a shared FW rules using a distributed protocol.
+
+    Args:
+        packet (list): A list of packets to be evaluated.
+        a (list): A list of random Secret shares coefficients 'a' for the hash function.
+        b (list): A list of random Secret shares coefficients 'b' for the hash function.
+        sBF (list): Secret shares of the Bloom filter (FW rules).
+        B (int): Size of the Bloom filter.
+        k (int): Number of hash functions.
+
+    Returns:
+        None: Prints "blook ip" for each IP address that matches the Bloom filter.
+    """
+    sigmai = sint.Array(n)  # Initialize an array to store the sum of shares for each pcaket
+    # Initialize the array with zeros (optimized for multithreading)
     @for_range_opt_multithread(n_threads, n)
     def _(i):
-        sigmai[i]=sint(0)
-    #step2    
+        sigmai[i] = sint(0)
+    # Step 2: Calculate the sum of shares matching for each packet
     for i in range(n):
         for j in range(k):
-            idx=hash_fun(iplist[i], a[j], b[j], p)%B
-            sigmai[i]=sigmai[i]+sBF[idx]
-    #step 3
-        sigma=sigmai[i].reveal()
-        if_then(sigma==k)
-        print_ln('blook ip')
+            idx = hash_fun(packet[i], a[j], b[j], p) % B  # Calculate the index for the Bloom filter
+            sigmai[i] = sigmai[i] + sBF[idx]  # Add the corresponding share from the Bloom filter
+
+    # Step 3: Reveal the sum of shares and check if it matches 'k'
+    for i in range(n):
+        sigma = sigmai[i].reveal()  # Reveal the sum of shares
+        if_then(sigma == k):  # Check if the sum matches 'k'
+            print_ln('blook packet')  # Print a message if the packet is blocked
         end_if()
 
-def bf_initi(sBF, cBF, iplist,a, b, B, n, k, p):
+def bf_initi(sBF, rules, a, b, B, n, k, p):
+    """
+    Initializes a Bloom filter with a list of rules, using secret shares.
+
+    Args:
+        sBF (list): The secret shares of the Bloom filter.
+        rules (list): The list of rules to be added to the Bloom filter.
+        a (list): A list of random coefficients 'a' for the hash function.
+        b (list): A list of random coefficients 'b' for the hash function.
+        B (int): Size of the Bloom filter.
+        n (int): Size of the rule list.
+        k (int): Number of hash functions.
+        p (int): A prime number for modulo operation.
+    """
+
     for i in range(n):
-        #for all the k hashes (0...k-1)
+        # For all hash functions (0 to k-1)
         for j in range(k):
-            idx=hash_fun(iplist[i], a[j], b[j], p)%B
-            sBF[idx]=sint(1)
-            cBF[idx]=1
-
-
+            idx = hash_fun(packets[i], a[j], b[j], p) % B  # Calculate the index for the Bloom filter
+            sBF[idx] = sint(1)  # Set the corresponding secret share to 1
+            
 """
-    Main function
+Main function for benchmarking Obliv-FW protocols.
 """
-p=program.prime 
-B=1400000
-n_threads=4
-n=10
-k=10
-a=[21990232883]*k
-b=[21990232]*k
-sBF=sint.Array(B)
-cBF=[0]*B
 
+# Set parameters
+p = program.prime  # Prime number for modulo operation
+B = 200000  # Bloom filter size (set to 200000 for testing)
+n_threads = 8  # Number of threads for multithreading
+n = 10  # Number of packets
+k = 10  # Number of hash functions
+
+# Initialize random coefficients for hash function
+a = [21990232883] * k  
+b = [21990232] * k
+
+# Initialize Bloom filter
+sBF = sint.Array(B)  # Array for secret shares of the Bloom filter
+
+# Create a list of packets 
+packets = list(range(0, n + 1))
 iplist=list(range(0, n+1))
 
-#   Initialization
-bf_initi(sBF, cBF, iplist, a, b, B, n, k, p)
+# --- Initialization ---
 
-#Step1
-#Derive γ from the incoming message
-gamma=iplist
-#   Evaluation
-alg2(gamma,a, b, sBF, B, k)
+bf_initi(sBF, cBF, packets, a, b, B, n, k, p)  # Initialize Bloom filter
+
+# --- Evaluation ---
+
+# Step 1: Derive gamma (packet) from incoming message
+gamma = packets
+
+alg2(gamma, a, b, sBF, B, k)  # Run evaluation protocol (using Bloom filter)
